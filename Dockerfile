@@ -24,11 +24,15 @@ RUN printf "deb http://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricte
                 libfl2 libfl-dev zlib1g zlib1g-dev \
                 g++-riscv64-linux-gnu gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu \
                 libstdc++6-riscv64-cross libc6-riscv64-cross gcc-riscv64-unknown-elf binutils-riscv64-unknown-elf && \
-                cat /etc/ssh/sshd_config | sed 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' | sed 's/#PermitRootLogin without-password/PermitRootLogin yes/g' > /etc/ssh/sshd_config && \ 
-curl -L http://raw.gitmirror.com/lefou/millw/0.4.11/millw | sed 's/github.com/hub.fgit.cf/g' | sed "s/repo1.maven.org\/maven2/maven.aliyun.com\/repository\/central/g" > /bin/mill && \
+                cat /etc/ssh/sshd_config | sed 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' | sed 's/#PermitRootLogin without-password/PermitRootLogin yes/g' > /etc/ssh/sshd_config 
+
+# mill and change source
+RUN curl -L http://raw.gitmirror.com/lefou/millw/0.4.11/millw | sed 's/github.com/hub.fgit.cf/g' | sed "s/repo1.maven.org\/maven2/maven.aliyun.com\/repository\/central/g" > /bin/mill && \
     chmod +x /bin/mill && \
-    mill --help && \
-git clone https://github.com/verilator/verilator.git verilator && \
+    mill --help
+
+# verilator v5.008 
+RUN git clone https://github.com/verilator/verilator.git verilator && \
     unset VERILATOR_ROOT && \
     cd verilator && git pull && git checkout v5.008 && \
     autoconf && \
